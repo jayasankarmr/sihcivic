@@ -177,7 +177,8 @@ const ReportIssue = () => {
                     placeholder="12-digit Aadhaar number"
                     required
                     inputMode="numeric"
-                    pattern="\\d{12}"
+                    pattern="[0-9]{12}"
+                    maxLength={12}
                   />
                   <p className="text-xs text-gray-500 mt-1">Enter a 12-digit Aadhaar number</p>
                 </div>
@@ -382,7 +383,8 @@ const ReportIssue = () => {
                       placeholder="e.g., 834001"
                       required
                       inputMode="numeric"
-                      pattern="\\d{6}"
+                      pattern="[0-9]{6}"
+                      maxLength={6}
                     />
                   </div>
                 </div>
