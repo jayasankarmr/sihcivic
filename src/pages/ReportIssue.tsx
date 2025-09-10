@@ -4,11 +4,20 @@ import { Upload, MapPin, Camera, CheckCircle } from 'lucide-react';
 const ReportIssue = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
+    // Personal Info
+    aadhaar: '',
+    name: '',
+    email: '',
+    phone: '',
+    // Issue Details
     title: '',
     description: '',
     category: '',
     location: '',
+    state: '',
+    pincode: '',
     urgency: 'medium',
+    urgencyReason: '',
     photo: null
   });
   const [submitted, setSubmitted] = useState(false);
@@ -26,9 +35,9 @@ const ReportIssue = () => {
   ];
 
   const steps = [
-    { id: 1, name: 'Issue Details', description: 'Describe the problem' },
-    { id: 2, name: 'Location & Media', description: 'Add location and photos' },
-    { id: 3, name: 'Review & Submit', description: 'Confirm and submit' }
+    { id: 1, name: 'Personal Info', description: 'Tell us about you' },
+    { id: 2, name: 'Issue Details', description: 'Describe the problem' },
+    { id: 3, name: 'Location & Media', description: 'Add location and photos' }
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -53,8 +62,13 @@ const ReportIssue = () => {
     try {
       const submitData = new FormData();
       Object.keys(formData).forEach(key => {
-        if (formData[key as keyof typeof formData]) {
-          submitData.append(key, formData[key as keyof typeof formData] as any);
+        const value = formData[key as keyof typeof formData] as any;
+        if (key === 'photo') {
+          if (value) {
+            submitData.append('photo', value);
+          }
+        } else if (value !== undefined && value !== null) {
+          submitData.append(key, value as string);
         }
       });
 
@@ -146,8 +160,78 @@ const ReportIssue = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-8">
-            {/* Step 1: Issue Details */}
+            {/* Step 1: Personal Info */}
             {currentStep === 1 && (
+              <div className="space-y-6">
+                <div>
+                  <label htmlFor="aadhaar" className="block text-sm font-medium text-gray-700 mb-2">
+                    Aadhaar Number *
+                  </label>
+                  <input
+                    type="text"
+                    id="aadhaar"
+                    name="aadhaar"
+                    value={formData.aadhaar}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200"
+                    placeholder="12-digit Aadhaar number"
+                    required
+                    inputMode="numeric"
+                    pattern="\\d{12}"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Enter a 12-digit Aadhaar number</p>
+                </div>
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                    Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200"
+                    placeholder="e.g., Rohan Kumar"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                    Email *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200"
+                    placeholder="you@example.com"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                    Phone (Optional)
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200"
+                    placeholder="e.g., 98765 43210"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Step 2: Issue Details */}
+            {currentStep === 2 && (
               <div className="space-y-6">
                 <div>
                   <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
@@ -224,12 +308,29 @@ const ReportIssue = () => {
                     <option value="medium">Medium - Should be addressed soon</option>
                     <option value="high">High - Needs immediate attention</option>
                   </select>
+                  {formData.urgency === 'high' && (
+                    <div className="mt-4">
+                      <label htmlFor="urgencyReason" className="block text-sm font-medium text-gray-700 mb-2">
+                        Reason for High Urgency *
+                      </label>
+                      <textarea
+                        id="urgencyReason"
+                        name="urgencyReason"
+                        value={formData.urgencyReason}
+                        onChange={handleInputChange}
+                        rows={3}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200"
+                        placeholder="Explain why this needs immediate attention"
+                        required
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             )}
 
-            {/* Step 2: Location & Media */}
-            {currentStep === 2 && (
+            {/* Step 3: Location & Media */}
+            {currentStep === 3 && (
               <div className="space-y-6">
                 <div>
                   <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
@@ -249,6 +350,41 @@ const ReportIssue = () => {
                     />
                   </div>
                   <p className="text-sm text-gray-500 mt-1">Provide specific landmarks or addresses</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-2">
+                      State *
+                    </label>
+                    <input
+                      type="text"
+                      id="state"
+                      name="state"
+                      value={formData.state}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200"
+                      placeholder="e.g., Jharkhand"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="pincode" className="block text-sm font-medium text-gray-700 mb-2">
+                      Pincode *
+                    </label>
+                    <input
+                      type="text"
+                      id="pincode"
+                      name="pincode"
+                      value={formData.pincode}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200"
+                      placeholder="e.g., 834001"
+                      required
+                      inputMode="numeric"
+                      pattern="\\d{6}"
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -279,50 +415,6 @@ const ReportIssue = () => {
                   <h3 className="font-semibold text-blue-800 mb-2">📱 Pro Tip</h3>
                   <p className="text-blue-700 text-sm">
                     Take clear photos that show the problem from multiple angles. This helps authorities understand and resolve the issue faster.
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Step 3: Review & Submit */}
-            {currentStep === 3 && (
-              <div className="space-y-6">
-                <h3 className="text-xl font-semibold text-gray-800 mb-4">Review Your Report</h3>
-                
-                <div className="bg-gray-50 rounded-lg p-6 space-y-4">
-                  <div>
-                    <span className="font-medium text-gray-700">Title:</span>
-                    <p className="text-gray-900 mt-1">{formData.title}</p>
-                  </div>
-                  <div>
-                    <span className="font-medium text-gray-700">Category:</span>
-                    <p className="text-gray-900 mt-1">{categories.find(cat => cat.id === formData.category)?.name}</p>
-                  </div>
-                  <div>
-                    <span className="font-medium text-gray-700">Description:</span>
-                    <p className="text-gray-900 mt-1">{formData.description}</p>
-                  </div>
-                  <div>
-                    <span className="font-medium text-gray-700">Location:</span>
-                    <p className="text-gray-900 mt-1">{formData.location}</p>
-                  </div>
-                  <div>
-                    <span className="font-medium text-gray-700">Urgency:</span>
-                    <p className="text-gray-900 mt-1 capitalize">{formData.urgency}</p>
-                  </div>
-                  {formData.photo && (
-                    <div>
-                      <span className="font-medium text-gray-700">Photo:</span>
-                      <p className="text-green-600 mt-1">✓ Photo attached</p>
-                    </div>
-                  )}
-                </div>
-
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                  <h4 className="font-semibold text-yellow-800 mb-2">⚠️ Important Notice</h4>
-                  <p className="text-yellow-700 text-sm">
-                    By submitting this report, you confirm that the information provided is accurate and agree to our terms of service. 
-                    False reports may result in account restrictions.
                   </p>
                 </div>
               </div>
