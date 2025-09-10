@@ -6,7 +6,7 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
@@ -24,6 +24,23 @@ mongoose.connect('mongodb://localhost:27017/civic-report', {
 
 // Issue Schema
 const issueSchema = new mongoose.Schema({
+  // Personal Info
+  aadhaar: {
+    type: String,
+    required: true
+  },
+  name: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  phone: {
+    type: String,
+    default: ''
+  },
   reportId: {
     type: String,
     required: true,
@@ -42,7 +59,16 @@ const issueSchema = new mongoose.Schema({
     required: true,
     enum: ['pothole', 'streetlight', 'garbage', 'water', 'drainage', 'road', 'park', 'other']
   },
+  // Location & Address
   location: {
+    type: String,
+    required: true
+  },
+  state: {
+    type: String,
+    required: true
+  },
+  pincode: {
     type: String,
     required: true
   },
@@ -50,6 +76,10 @@ const issueSchema = new mongoose.Schema({
     type: String,
     enum: ['low', 'medium', 'high'],
     default: 'medium'
+  },
+  urgencyReason: {
+    type: String,
+    default: ''
   },
   status: {
     type: String,
@@ -143,20 +173,36 @@ function generateReportId() {
 
 // Routes
 
+// Root and healthcheck routes
+app.get('/', (_req, res) => {
+  res.status(200).json({ status: 'ok', service: 'civic-reporting-backend' });
+});
+
+app.get('/health', (_req, res) => {
+  res.status(200).json({ status: 'healthy' });
+});
+
 // Submit new issue
 app.post('/api/issues', upload.single('photo'), async (req, res) => {
   try {
-    const { title, description, category, location, urgency } = req.body;
+    const { aadhaar, name, email, phone, title, description, category, location, state, pincode, urgency, urgencyReason } = req.body;
     
     const reportId = generateReportId();
     
     const newIssue = new Issue({
+      aadhaar,
+      name,
+      email,
+      phone,
       reportId,
       title,
       description,
       category,
       location,
+      state,
+      pincode,
       urgency,
+      urgencyReason,
       photo: req.file ? req.file.filename : null,
       updates: [{
         message: 'Issue report submitted successfully',

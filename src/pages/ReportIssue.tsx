@@ -1,9 +1,25 @@
 import React, { useState } from 'react';
 import { Upload, MapPin, Camera, CheckCircle } from 'lucide-react';
 
+type FormDataState = {
+  aadhaar: string;
+  name: string;
+  email: string;
+  phone: string;
+  title: string;
+  description: string;
+  category: string;
+  location: string;
+  state: string;
+  pincode: string;
+  urgency: 'low' | 'medium' | 'high';
+  urgencyReason: string;
+  photo: File | null;
+};
+
 const ReportIssue = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormDataState>({
     // Personal Info
     aadhaar: '',
     name: '',
@@ -13,9 +29,11 @@ const ReportIssue = () => {
     title: '',
     description: '',
     category: '',
+    // Location
     location: '',
     state: '',
     pincode: '',
+    // Other
     urgency: 'medium',
     urgencyReason: '',
     photo: null
@@ -64,9 +82,7 @@ const ReportIssue = () => {
       Object.keys(formData).forEach(key => {
         const value = formData[key as keyof typeof formData] as any;
         if (key === 'photo') {
-          if (value) {
-            submitData.append('photo', value);
-          }
+          if (value) submitData.append('photo', value as File);
         } else if (value !== undefined && value !== null) {
           submitData.append(key, value as string);
         }
@@ -89,9 +105,7 @@ const ReportIssue = () => {
   };
 
   const nextStep = () => {
-    if (currentStep < 3) {
-      setCurrentStep(currentStep + 1);
-    }
+    if (currentStep < 3) setCurrentStep(currentStep + 1);
   };
 
   const prevStep = () => {
@@ -164,9 +178,7 @@ const ReportIssue = () => {
             {currentStep === 1 && (
               <div className="space-y-6">
                 <div>
-                  <label htmlFor="aadhaar" className="block text-sm font-medium text-gray-700 mb-2">
-                    Aadhaar Number *
-                  </label>
+                  <label htmlFor="aadhaar" className="block text-sm font-medium text-gray-700 mb-2">Aadhaar Number *</label>
                   <input
                     type="text"
                     id="aadhaar"
@@ -180,12 +192,9 @@ const ReportIssue = () => {
                     pattern="[0-9]{12}"
                     maxLength={12}
                   />
-                  <p className="text-xs text-gray-500 mt-1">Enter a 12-digit Aadhaar number</p>
                 </div>
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                    Full Name *
-                  </label>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
                   <input
                     type="text"
                     id="name"
@@ -197,11 +206,8 @@ const ReportIssue = () => {
                     required
                   />
                 </div>
-
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                    Email *
-                  </label>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email *</label>
                   <input
                     type="email"
                     id="email"
@@ -213,11 +219,8 @@ const ReportIssue = () => {
                     required
                   />
                 </div>
-
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                    Phone (Optional)
-                  </label>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">Phone (Optional)</label>
                   <input
                     type="tel"
                     id="phone"
@@ -225,7 +228,7 @@ const ReportIssue = () => {
                     value={formData.phone}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200"
-                    placeholder="e.g., 98765 43210"
+                    placeholder="98765 43210"
                   />
                 </div>
               </div>
@@ -311,9 +314,7 @@ const ReportIssue = () => {
                   </select>
                   {formData.urgency === 'high' && (
                     <div className="mt-4">
-                      <label htmlFor="urgencyReason" className="block text-sm font-medium text-gray-700 mb-2">
-                        Reason for High Urgency *
-                      </label>
+                      <label htmlFor="urgencyReason" className="block text-sm font-medium text-gray-700 mb-2">Reason for High Urgency *</label>
                       <textarea
                         id="urgencyReason"
                         name="urgencyReason"
@@ -355,9 +356,7 @@ const ReportIssue = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-2">
-                      State *
-                    </label>
+                    <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-2">State *</label>
                     <input
                       type="text"
                       id="state"
@@ -370,9 +369,7 @@ const ReportIssue = () => {
                     />
                   </div>
                   <div>
-                    <label htmlFor="pincode" className="block text-sm font-medium text-gray-700 mb-2">
-                      Pincode *
-                    </label>
+                    <label htmlFor="pincode" className="block text-sm font-medium text-gray-700 mb-2">Pincode *</label>
                     <input
                       type="text"
                       id="pincode"
@@ -421,6 +418,7 @@ const ReportIssue = () => {
                 </div>
               </div>
             )}
+
 
             {/* Navigation Buttons */}
             <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">

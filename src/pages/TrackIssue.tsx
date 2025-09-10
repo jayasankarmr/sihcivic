@@ -167,10 +167,60 @@ const TrackIssue = () => {
                   </div>
                 </div>
 
+                {/* Personal Info */}
+                <div className="grid md:grid-cols-2 gap-6 mb-6">
+                  <div>
+                    <h3 className="font-semibold text-gray-700 mb-2">Name</h3>
+                    <p className="text-gray-900">{issueData.name || '-'}</p>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-700 mb-2">Email</h3>
+                    <p className="text-gray-900">{issueData.email || '-'}</p>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-700 mb-2">Aadhaar</h3>
+                    <p className="text-gray-900">{issueData.aadhaar || '-'}</p>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-700 mb-2">Phone</h3>
+                    <p className="text-gray-900">{issueData.phone || '-'}</p>
+                  </div>
+                </div>
+
+                {/* Address Info */}
+                <div className="grid md:grid-cols-2 gap-6 mb-6">
+                  <div>
+                    <h3 className="font-semibold text-gray-700 mb-2">State</h3>
+                    <p className="text-gray-900">{issueData.state || '-'}</p>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-700 mb-2">Pincode</h3>
+                    <p className="text-gray-900">{issueData.pincode || '-'}</p>
+                  </div>
+                </div>
+
+                {issueData.urgency === 'high' && issueData.urgencyReason && (
+                  <div className="mb-6">
+                    <h3 className="font-semibold text-gray-700 mb-2">Reason for High Urgency</h3>
+                    <p className="text-gray-900 bg-yellow-50 p-4 rounded-lg">{issueData.urgencyReason}</p>
+                  </div>
+                )}
+
                 <div>
                   <h3 className="font-semibold text-gray-700 mb-2">Description</h3>
                   <p className="text-gray-900 bg-gray-50 p-4 rounded-lg">{issueData.description}</p>
                 </div>
+
+                {issueData.photo && (
+                  <div className="mt-6">
+                    <h3 className="font-semibold text-gray-700 mb-2">Attached Photo</h3>
+                    <img
+                      src={`/uploads/${issueData.photo}`}
+                      alt="Issue attachment"
+                      className="max-h-80 rounded-lg border"
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Status Timeline */}
