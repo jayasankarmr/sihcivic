@@ -26,60 +26,61 @@ const Home = () => {
     }
   ];
 
-  const stats = [
-    { number: '5,234', label: 'Issues Reported' },
-    { number: '3,891', label: 'Issues Resolved' },
-    { number: '1,200', label: 'Active Citizens' },
-    { number: '98%', label: 'Resolution Rate' }
+  const heroStats = [
+    { number: '2,847', label: 'Issues Reported' },
+    { number: '1,923', label: 'Issues Resolved' },
+    { number: '15', label: 'Departments' },
+    { number: '98%', label: 'Satisfaction Rate' }
   ];
 
   return (
     <div className="pt-16">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-green-600 via-green-700 to-blue-800 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/20"></div>
+      {/* Hero Section (matches screenshot) */}
+      <section
+        className="relative overflow-hidden text-gray-900"
+        style={{ backgroundImage: "url('/cityscape-bg.jpg')", backgroundSize: 'cover', backgroundPosition: 'center' }}
+      >
+        <div className="absolute inset-0 bg-emerald-800/20"></div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              Report Civic Issues.<br />
-              <span className="text-green-300">Build Cleaner, Greener Communities.</span>
+          <div className="max-w-5xl mx-auto text-center">
+            <h1 className="font-extrabold tracking-tight text-4xl md:text-6xl lg:text-7xl leading-tight text-white">
+              <span className="block">Report Civic Issues.</span>
+              <span className="block text-black">Build Cleaner Communities.</span>
             </h1>
-            <p className="text-xl md:text-2xl mb-8 text-green-100 max-w-3xl mx-auto leading-relaxed">
-              Empower your community through technology. Report issues, track progress, and collaborate with local government for a cleaner, safer neighborhood.
+            <p className="mt-6 text-lg md:text-xl text-white max-w-3xl mx-auto">
+              Empower your community by reporting civic issues instantly. Track progress in real-time and witness positive change in your neighborhood.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to="/report"
-                className="inline-flex items-center px-8 py-4 bg-white text-green-700 font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                className="inline-flex items-center px-6 py-3 rounded-full bg-emerald-700 text-white font-semibold hover:bg-emerald-800 transition-colors"
               >
                 Report an Issue
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
               <Link
                 to="/track"
-                className="inline-flex items-center px-8 py-4 bg-green-500 text-white font-semibold rounded-xl hover:bg-green-600 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border-2 border-green-400"
+                className="inline-flex items-center px-6 py-3 rounded-full bg-white text-gray-800 font-semibold hover:bg-gray-100 border"
               >
                 Track an Issue
                 <Search className="ml-2 h-5 w-5" />
               </Link>
             </div>
+
+            {/* Stats inside hero */}
+            <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 justify-items-center">
+              {heroStats.map((s, i) => (
+                <div key={i} className="text-center">
+                  <div className="text-3xl md:text-4xl font-extrabold text-black">{s.number}</div>
+                  <div className="text-black text-sm md:text-base">{s.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-green-600 mb-2">{stat.number}</div>
-                <div className="text-gray-600 font-medium">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Stats are rendered within the hero above to match the screenshot */}
 
       {/* Features Section */}
       <section className="py-20 bg-gray-50">

@@ -30,12 +30,14 @@ const Header = () => {
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="bg-gradient-to-r from-green-500 to-blue-600 p-2 rounded-lg">
-              <MapPin className="h-6 w-6 text-white" />
-            </div>
+          <Link to="/" className="flex items-center space-x-3">
+            <img
+              src="/logo.png"
+              alt="Nagar Setu logo"
+              className="h-10 w-10 sm:h-12 sm:w-12 object-contain"
+            />
             <div className="hidden sm:block">
-              <h1 className="text-xl font-bold text-gray-800">CivicReport</h1>
+              <h1 className="text-xl font-bold text-gray-800">Nagar Setu</h1>
               <p className="text-xs text-gray-600">Smart India Initiative</p>
             </div>
           </Link>

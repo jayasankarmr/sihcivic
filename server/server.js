@@ -175,7 +175,7 @@ function generateReportId() {
 
 // Root and healthcheck routes
 app.get('/', (_req, res) => {
-  res.status(200).json({ status: 'ok', service: 'civic-reporting-backend' });
+  res.status(200).json({ status: 'ok', service: 'nagar-setu-backend' });
 });
 
 app.get('/health', (_req, res) => {

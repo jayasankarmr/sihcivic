@@ -59,7 +59,7 @@ const Contact = () => {
     {
       icon: Mail,
       title: 'Email',
-      details: 'support@civicreport.gov.in',
+      details: 'support@nagarsetu.gov.in',
       subtitle: 'We respond within 24 hours'
     },
     {

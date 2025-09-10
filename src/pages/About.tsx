@@ -57,7 +57,7 @@ const About = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              About <span className="text-green-300">CivicReport</span>
+              About <span className="text-green-300">Nagar Setu</span>
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-green-100 leading-relaxed">
               A revolutionary platform born from the Smart India Hackathon initiative, connecting citizens with their government to build cleaner, greener communities.
@@ -116,7 +116,7 @@ const About = () => {
                   The Beginning
                 </h3>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  Born from the Smart India Hackathon 2024, CivicReport emerged as a solution to bridge the communication gap between citizens and local government. Our team recognized that many civic issues go unnoticed or unreported simply because there was no easy, accessible way for citizens to communicate with authorities.
+                  Born from the Smart India Hackathon 2024, Nagar Setu emerged as a solution to bridge the communication gap between citizens and local government. Our team recognized that many civic issues go unnoticed or unreported simply because there was no easy, accessible way for citizens to communicate with authorities.
                 </p>
                 <p className="text-gray-700 leading-relaxed">
                   What started as a hackathon project has evolved into a comprehensive platform that empowers communities to actively participate in local governance and infrastructure development.
@@ -142,7 +142,7 @@ const About = () => {
                   The Future
                 </h3>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  With the support of the Government of Jharkhand and active participation from communities across the state, CivicReport continues to evolve. We're constantly adding new features, expanding to more cities, and finding innovative ways to make civic engagement more accessible and effective.
+                  With the support of the Government of Jharkhand and active participation from communities across the state, Nagar Setu continues to evolve. We're constantly adding new features, expanding to more cities, and finding innovative ways to make civic engagement more accessible and effective.
                 </p>
                 <p className="text-gray-700 leading-relaxed">
                   Our vision extends beyond just reporting issues – we aim to create a comprehensive ecosystem where citizens, government, and technology work together to build the cities of tomorrow.
