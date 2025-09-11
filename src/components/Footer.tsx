@@ -9,9 +9,9 @@ const Footer = () => {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
-              <img src="/logo.png" alt="Nagar Setu logo" className="h-10 w-10 object-contain" />
+              <img src="/logo.png" alt="Nagar सेतु logo" className="h-10 w-10 object-contain" />
               <div>
-                <h2 className="text-xl font-bold">Nagar Setu</h2>
+                <h2 className="text-xl font-bold">Nagar सेतु</h2>
                 <p className="text-sm text-gray-400">Smart India Initiative</p>
               </div>
             </div>
@@ -62,7 +62,7 @@ const Footer = () => {
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col sm:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm mb-4 sm:mb-0">
-              © 2024 Nagar Setu. A Government of Jharkhand Initiative. All rights reserved.
+              © 2024 Nagar सेतु. A Government of Jharkhand Initiative. All rights reserved.
             </p>
             <div className="flex space-x-6 text-sm">
               <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">Privacy Policy</a>

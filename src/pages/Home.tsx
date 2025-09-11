@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, FileText, Search, Users, CheckCircle, AlertCircle } from 'lucide-react';
 
@@ -20,13 +20,15 @@ interface Issue {
 
 const Home = () => {
   const [recentIssues, setRecentIssues] = useState<Issue[]>([]);
+  const [allIssues, setAllIssues] = useState<Issue[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch recent issues
+  // Fetch all issues and calculate stats
   const fetchRecentIssues = async () => {
     try {
       const response = await fetch('/api/issues');
       const data = await response.json();
+      setAllIssues(data);
       // Get the 3 most recent issues
       const recent = data.slice(0, 3);
       setRecentIssues(recent);
@@ -102,11 +104,26 @@ const Home = () => {
     }
   ];
 
+  // Calculate dynamic stats from database
   const heroStats = [
-    { number: '2,847', label: 'Issues Reported' },
-    { number: '1,923', label: 'Issues Resolved' },
-    { number: '15', label: 'Departments' },
-    { number: '98%', label: 'Satisfaction Rate' }
+    { 
+      number: allIssues.length.toLocaleString(), 
+      label: 'Issues Reported' 
+    },
+    { 
+      number: allIssues.filter(issue => issue.status === 'resolved').length.toLocaleString(), 
+      label: 'Issues Resolved' 
+    },
+    { 
+      number: new Set(allIssues.map(issue => issue.category)).size.toString(), 
+      label: 'Categories' 
+    },
+    { 
+      number: allIssues.length > 0 
+        ? Math.round((allIssues.filter(issue => issue.status === 'resolved').length / allIssues.length) * 100) + '%'
+        : '0%', 
+      label: 'Resolution Rate' 
+    }
   ];
 
   return (
@@ -200,7 +217,7 @@ const Home = () => {
             </div>
           ) : (
             <div className="grid md:grid-cols-3 gap-8">
-              {recentIssues.map((issue, index) => {
+              {recentIssues.map((issue) => {
                 const statusInfo = getStatusInfo(issue.status);
                 const StatusIcon = statusInfo.icon;
                 const timeAgo = getTimeAgo(issue.createdAt);

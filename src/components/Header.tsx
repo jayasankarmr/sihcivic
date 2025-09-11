@@ -34,11 +34,11 @@ const Header = () => {
           <Link to="/" className="flex items-center space-x-3">
             <img
               src="/logo.png"
-              alt="Nagar Setu logo"
+              alt="Nagar सेतु logo"
               className="h-10 w-10 sm:h-12 sm:w-12 object-contain"
             />
             <div className="hidden sm:block">
-              <h1 className="text-xl font-bold text-gray-800">Nagar Setu</h1>
+              <h1 className="text-xl font-bold text-gray-800">Nagar सेतु</h1>
               <p className="text-xs text-gray-600">Smart India Initiative</p>
             </div>
           </Link>
