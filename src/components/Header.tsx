@@ -21,6 +21,7 @@ const Header = () => {
     { name: 'Track Issue', path: '/track' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' },
+    { name: 'Admin Login', path: '/admin-login' },
   ];
 
   return (
