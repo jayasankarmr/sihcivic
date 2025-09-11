@@ -1,8 +1,89 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, FileText, Search, Users, Award, CheckCircle, AlertCircle } from 'lucide-react';
+import { ArrowRight, FileText, Search, Users, CheckCircle, AlertCircle } from 'lucide-react';
+
+interface Issue {
+  _id: string;
+  reportId: string;
+  title: string;
+  name: string;
+  email: string;
+  category: string;
+  status: string;
+  urgency: string;
+  createdAt: string;
+  updatedAt: string;
+  location: string;
+  state: string;
+  pincode: string;
+}
 
 const Home = () => {
+  const [recentIssues, setRecentIssues] = useState<Issue[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch recent issues
+  const fetchRecentIssues = async () => {
+    try {
+      const response = await fetch('/api/issues');
+      const data = await response.json();
+      // Get the 3 most recent issues
+      const recent = data.slice(0, 3);
+      setRecentIssues(recent);
+    } catch (error) {
+      console.error('Error fetching recent issues:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRecentIssues();
+  }, []);
+
+  // Helper function to get status color and icon
+  const getStatusInfo = (status: string) => {
+    switch (status) {
+      case 'resolved':
+        return {
+          color: 'green',
+          icon: CheckCircle,
+          text: 'Resolved'
+        };
+      case 'in-progress':
+        return {
+          color: 'blue',
+          icon: AlertCircle,
+          text: 'In Progress'
+        };
+      case 'submitted':
+        return {
+          color: 'orange',
+          icon: FileText,
+          text: 'New Report'
+        };
+      default:
+        return {
+          color: 'gray',
+          icon: FileText,
+          text: 'Submitted'
+        };
+    }
+  };
+
+  // Helper function to format time ago
+  const getTimeAgo = (dateString: string) => {
+    const now = new Date();
+    const issueDate = new Date(dateString);
+    const diffTime = Math.abs(now.getTime() - issueDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 1) return '1 day ago';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks ago`;
+    return `${Math.ceil(diffDays / 30)} months ago`;
+  };
+
   const features = [
     {
       icon: FileText,
@@ -18,11 +99,6 @@ const Home = () => {
       icon: Users,
       title: 'Community Driven',
       description: 'Join thousands of citizens working together to improve our communities.'
-    },
-    {
-      icon: Award,
-      title: 'Government Backed',
-      description: 'Officially supported by the Government of Jharkhand for reliable service.'
     }
   ];
 
@@ -68,7 +144,7 @@ const Home = () => {
             </div>
 
             {/* Stats inside hero */}
-            <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 justify-items-center">
+            <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 justify-items-center">
               {heroStats.map((s, i) => (
                 <div key={i} className="text-center">
                   <div className="text-3xl md:text-4xl font-extrabold text-black">{s.number}</div>
@@ -93,9 +169,9 @@ const Home = () => {
               Simple, effective tools to make your voice heard and create positive change in your community.
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {features.map((feature, index) => (
-              <div key={index} className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+              <div key={index} className="bg-white p-3 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                 <div className="bg-gradient-to-br from-green-500 to-blue-600 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
                   <feature.icon className="h-7 w-7 text-white" />
                 </div>
@@ -118,32 +194,35 @@ const Home = () => {
               See how our community is making a difference every day.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-green-50 p-6 rounded-xl border border-green-200">
-              <div className="flex items-center mb-4">
-                <CheckCircle className="h-6 w-6 text-green-600 mr-2" />
-                <span className="text-green-700 font-semibold">Resolved</span>
-              </div>
-              <h3 className="font-semibold text-gray-800 mb-2">Pothole on MG Road Fixed</h3>
-              <p className="text-gray-600 text-sm">Reported 3 days ago • Resolved today</p>
+          {loading ? (
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-4 border-green-500 border-t-transparent"></div>
             </div>
-            <div className="bg-blue-50 p-6 rounded-xl border border-blue-200">
-              <div className="flex items-center mb-4">
-                <AlertCircle className="h-6 w-6 text-blue-600 mr-2" />
-                <span className="text-blue-700 font-semibold">In Progress</span>
-              </div>
-              <h3 className="font-semibold text-gray-800 mb-2">Streetlight Repair on Park Avenue</h3>
-              <p className="text-gray-600 text-sm">Reported 1 day ago • Under review</p>
+          ) : (
+            <div className="grid md:grid-cols-3 gap-8">
+              {recentIssues.map((issue, index) => {
+                const statusInfo = getStatusInfo(issue.status);
+                const StatusIcon = statusInfo.icon;
+                const timeAgo = getTimeAgo(issue.createdAt);
+                
+                return (
+                  <div key={issue._id} className={`bg-${statusInfo.color}-50 p-6 rounded-xl border border-${statusInfo.color}-200`}>
+                    <div className="flex items-center mb-4">
+                      <StatusIcon className={`h-6 w-6 text-${statusInfo.color}-600 mr-2`} />
+                      <span className={`text-${statusInfo.color}-700 font-semibold`}>{statusInfo.text}</span>
+                    </div>
+                    <h3 className="font-semibold text-gray-800 mb-2">{issue.title}</h3>
+                    <p className="text-gray-600 text-sm">
+                      Reported {timeAgo} • {issue.location}
+                    </p>
+                    <p className="text-gray-500 text-xs mt-1">
+                      ID: {issue.reportId} • {issue.category}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
-            <div className="bg-orange-50 p-6 rounded-xl border border-orange-200">
-              <div className="flex items-center mb-4">
-                <FileText className="h-6 w-6 text-orange-600 mr-2" />
-                <span className="text-orange-700 font-semibold">New Report</span>
-              </div>
-              <h3 className="font-semibold text-gray-800 mb-2">Overflowing Garbage Bin</h3>
-              <p className="text-gray-600 text-sm">Reported 2 hours ago • Awaiting assignment</p>
-            </div>
-          </div>
+          )}
         </div>
       </section>
 
